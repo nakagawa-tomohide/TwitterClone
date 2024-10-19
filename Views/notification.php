@@ -8,6 +8,7 @@ include_once('../util.php');
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <?php include_once('../Views/common/head.php'); ?>
     <title>通知画面 / Twitterクローン</title>
@@ -27,9 +28,9 @@ include_once('../util.php');
 
             <!-- 通知一覧エリア -->
             <div class="notification-list">
-                <?php if(isset($_GET['case'])) :?>
+                <?php if (isset($_GET['case'])) : ?>
                     <p class="no-result">通知はまだありません。</p>
-                <?php else :?>
+                <?php else : ?>
                     <div class="notification-item">
                         <div class="user">
                             <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/sample-person.jpg" alt="">
@@ -53,4 +54,5 @@ include_once('../util.php');
     </div>
     <?php include_once('../Views/common/foot.php'); ?>
 </body>
+
 </html>
