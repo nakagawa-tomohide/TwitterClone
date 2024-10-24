@@ -1,16 +1,9 @@
-<?php
-// 設定関連を読み込む
-include_once('../config.php');
-// 便利な関数を読み込む
-include_once('../util.php');
-?>
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <?php include_once('../Views/common/head.php'); ?>
-    <title>会員登録画面 / Twitterクローン</title>
-    <meta name="description" content="会員登録画面です">
+    <title>ログイン画面 / Twitterクローン</title>
+    <meta name="description" content="ログイン画面です">
 </head>
 
 <body class="signup text-center">
@@ -18,6 +11,13 @@ include_once('../util.php');
         <form action="sign-in.php" method="post">
             <img src="<?php echo HOME_URL; ?>Views/img/logo-white.svg" alt="" class="logo-white">
             <h1>Twitterクローンにログイン</h1>
+
+            <?php if (isset($view_try_login_result) && $view_try_login_result === false): ?>
+                <div class="alert alert-warning text-sm" role="alert">
+                    ログインに失敗しました。メールアドレス、パスワードが正しいかかご確認ください。
+                </div>
+            <?php endif; ?>
+
             <input type="email" class="form-control" name="email" placeholder="メールアドレス" required autofocus>
             <input type="password" class="form-control" name="password" placeholder="パスワード" required>
             <button class="w-100 btn btn-lg" type="submit">ログインする</button>
