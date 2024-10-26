@@ -2,32 +2,65 @@
 //いいね！用のJavaScript
 ////////////////////////////////
 
-$(function() {
+$(function () {
     // いいね！がクリックされたとき
-    $('.js-like').click(function() { //js-likeクラスがクリックされたとき
+    $('.js-like').click(function () { //js-likeクラスがクリックされたとき
         const this_obj = $(this);
+        const tweet_id = $(this).data('tweet-id');
         const like_id = $(this).data('like-id');
         const like_count_obj = $(this).parent().find('.js-like-count');
         let like_count = Number(like_count_obj.html());
 
-        if(like_id) {
+        if (like_id) {
             //いいね！取り消し(すでにいいね！済みの場合)
-            //いいね！カウントを減らす
-            like_count--; //like_countを１減らす
-            like_count_obj.html(like_count);//HTMLにセット
-            this_obj.data('like-id', null);
+            // 非同期通信
+            $.ajax({
+                url: 'like.php',
+                type: 'POST',
+                data: {
+                    'like_id': like_id
+                },
+                timeout: 10000
+            })
+            // 取り消しが成功
+            .done(() => { // 無名関数
+                //いいね！カウントを減らす
+                like_count--; //like_countを１減らす
+                like_count_obj.html(like_count);//HTMLにセット
+                this_obj.data('like-id', null);
 
-            //いいね！ボタンの色をグレーに変更
-            $(this).find('img').attr('src', '../Views/img/icon-heart.svg');
+                //いいね！ボタンの色をグレーに変更
+                $(this).find('img').attr('src', '../Views/img/icon-heart.svg');
+            })
+            .fail((data) => {
+                alert('処理中にエラーが発生しました。');
+                console.log(data);
+            });
         } else {
             //いいね！付与(いいね！されてない場合)
-            //いいね！カウントを増やす
-            like_count++; //like_countを１減らす
-            like_count_obj.html(like_count);//HTMLをセット
-            this_obj.data('like-id', true);
+            // 非同期通信
+            $.ajax({
+                url: 'like.php',
+                type: 'POST',
+                data: {
+                    'tweet_id': tweet_id
+                },
+                timeout: 10000
+            })
+            // いいね！が成功
+            .done((data) => {
+                // いいね！カウントを増やす
+                like_count++; //like_countを１増やす
+                like_count_obj.html(like_count);//HTMLをセット
+                this_obj.data('like-id', data['like_id']);
 
-            //いいね！ボタンの色をグレーに変更
-            $(this).find('img').attr('src', '../Views/img/icon-heart-twitterblue.svg');
+                //いいね！ボタンの色を青に変更
+                $(this).find('img').attr('src', '../Views/img/icon-heart-twitterblue.svg');
+            })
+            .fail((data) => {
+                alert('処理中にエラーが発生しました。');
+                console.log(data);
+            });
         }
     });
 })
