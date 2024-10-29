@@ -47,9 +47,10 @@ function createTweet(array $data) {
  *
  * @param array $user ログインしているユーザー情報
  * @param string $keyword 検索キーワード
+ * @param array $suer_ids ユーザーID一覧
  * @return array|false
  */
-function findTweets(array $user, string $keyword = null) { // 検索キーワードは入力されないパターンもあるのでnullを許容
+function findTweets(array $user, string $keyword = null, array $user_ids = null) { // 検索キーワードは入力されないパターンもあるのでnullを許容
 
     // DB接続
     $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -99,6 +100,16 @@ function findTweets(array $user, string $keyword = null) { // 検索キーワー
         // ツイート主のニックネーム・ユーザー名・本文から部分一致検索
         // クエリ変数に追記 MySQLのCONCAT関数（複数の文字またはカラムを連結できる）
         $query .= ' AND CONCAT(U.nickname, U.name, T.body) LIKE "%' . $keyword . '%"';
+    }
+
+    // ユーザーIDが指定されている場合
+    if (isset($user_ids)) {
+        foreach ($user_ids as $key => $user_id) {
+            $user_ids[$key] = $mysqli->real_escape_string($user_id);
+        }
+        $user_ids_csv = '"' . join('","', $user_ids) . '"'; // エスケープ済みの$user_idsを","で連結させて一つの文字列にする
+        // 例）$user_ids_csv = '"2","1","9"';のように入る
+        $query .= ' AND T.user_id IN (' . $user_ids_csv . ')';
     }
 
     // 新しい順に並べ替え
