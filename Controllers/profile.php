@@ -61,9 +61,9 @@ if (isset($_POST['nickname']) && isset($_POST['nickname']) && isset($_POST['nick
 // 表示するユーザーIDを取得（デフォルトはログインユーザー）
 // ---------------------------------
 // URLにuser_idがある場合->それを対象ユーザーにする
-$requested_user_id = $user['id']; // 初期値は自分のuse_id
+$requested_user_id = $user['id']; // 初期値は自分のuse_id（自分のユーザー画面）
 if (isset($_GET['user_id'])) { // GETでuser_idがセットされている場合
-    $requested_user_id = $_GET['user_id']; // GETで取得したuser_idで上書き
+    $requested_user_id = $_GET['user_id']; // GETで取得したuser_idで上書き（他人のユーザー画面）
 }
 
 // ---------------------------------
@@ -71,7 +71,7 @@ if (isset($_GET['user_id'])) { // GETでuser_idがセットされている場合
 // ---------------------------------
 // ユーザー情報
 $view_user = $user;
-// プロフィール詳細を取得
+// プロフィール詳細を取得（自分か他人のプロフィール詳細を取得）
 $view_requested_user = findUser($requested_user_id, $user['id']); // $user_idは自分がフォローしているかどうかの判断材料
 // ツイート一覧
 $view_tweets = findTweets($user, null, [$requested_user_id]);
