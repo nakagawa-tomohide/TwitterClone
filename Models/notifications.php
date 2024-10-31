@@ -83,7 +83,7 @@ function findNotifications(int $user_id) {
         FROM
             notifications AS N
             JOIN
-                users AS U ON U.id = N.sent_user_id AND U.status = 'active'
+                users AS U ON U.id = N.sent_user_id AND U.status = 'active' -- 誰がいいね！したか、フォローしたかを知るために必要
         WHERE
             N.status = 'active' AND N.received_user_id = '$user_id'
         ORDER BY
