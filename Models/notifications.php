@@ -103,6 +103,12 @@ function findNotifications(int $user_id) {
         echo 'エラーメッセージ：' . $mysqli->error . "\n";
     }
 
+    // ---------------------------
+    // 後処理
+    // ---------------------------
+    //DBを開放
+    $mysqli->close();
+
     return $notifications;
 
 }
